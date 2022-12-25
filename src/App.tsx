@@ -1,6 +1,9 @@
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { CheckName } from './pages/CheckName';
 import { Home } from './pages/Home';
+import styles from './app.module.scss';
+import { useState } from "react";
+
 
 export default function App() {
   return (
@@ -13,21 +16,26 @@ export default function App() {
       </Routes>
   );
 }
+const links =  [{path:'/',name:'Home'},{path:'/check-name',name:'Check Name'},{path:'/collect-name',name:'Collect Name'}];
 
 function Layout() {
+  const [selected,setSelected] = useState<string>('/');
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/check-name">Check Name</Link>
-          </li>
+    <div className={styles.main}>
+      <nav className={styles._nav}>
+        <ul className={styles.__list}>
+          {links.map((item,index) =>{
+            return(
+              
+              <li key={index.toString() + item.name} className={`${styles.___listItem} ${selected === item.path && styles.selected}`}>
+                <Link onClick={()=> setSelected(item.path)} to={item.path}>{item.name}</Link>
+              </li>
+
+            )
+          })}                
         </ul>
       </nav>
-      <hr />
+      
       <Outlet />
     </div>
   );
