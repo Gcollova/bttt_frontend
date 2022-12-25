@@ -1,6 +1,6 @@
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { CheckName } from './pages/CheckName';
-import { Home } from './pages/Home';
+import { Home } from './pages/Home/Home';
 import styles from './app.module.scss';
 import { useState } from "react";
 
