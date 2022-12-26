@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { BaseResponse } from "../../interfaces";
 import { User } from "../../interfaces/user_interface";
 import { nameCheck } from "../../services/name_regex";
 import styles from "./collect_name.module.scss";
@@ -6,6 +7,15 @@ import styles from "./collect_name.module.scss";
 const CollectName = () => {
   let maxAge = new Date().setFullYear(new Date().getFullYear() - 150);
   let minAge = new Date().setFullYear(new Date().getFullYear() - 1);
+  const [status, setStatus] = useState<
+    | "INITIAL"
+    | "SEND_DATA"
+    | "SENDING_DATA"
+    | "DATA_SENDED"
+    | "ERROR_SENDING_DATA"
+  >();
+
+  const [data, setData] = useState<BaseResponse>();
   const [user, setUser] = useState<User>({
     name: "",
     age: 1,
@@ -35,7 +45,7 @@ const CollectName = () => {
     e.preventDefault();
 
     if (user.name.trim() !== "" && nameCheck(user.name.trim())) {
-      //   setStatus("SEND_DATA");
+      setStatus("SEND_DATA");
     } else {
       alert("Il nome inserito non è valido");
       setUser({
@@ -52,6 +62,65 @@ const CollectName = () => {
       setUser({ ...user, isMarried: false });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (status === "SEND_DATA") {
+      setStatus("SENDING_DATA");
+      fetch(`${window.location.origin.replace("3000", "3001")}/collect`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...user,
+        }),
+      })
+        .then((rawResponse) => {
+          if ([200, 201].includes(rawResponse.status)) {
+            return rawResponse.json();
+          } else {
+            throw new Error();
+          }
+        })
+        .then((response: BaseResponse) => {
+          setStatus("DATA_SENDED");
+          setData(response);
+        })
+        .catch((e) => {
+          setStatus("ERROR_SENDING_DATA");
+        });
+    }
+  }, [status, user]);
+
+  if (status === "ERROR_SENDING_DATA") {
+    return (
+      <div className={styles.badResponse}>
+        <h1>ERRORE INVIO DATI</h1>
+        <button onClick={() => setStatus("INITIAL")}>RIPROVA</button>
+      </div>
+    );
+  }
+
+  if (status === "SEND_DATA" || status === "SENDING_DATA") {
+    return (
+      <div className={styles.response}>
+        <h1>INVIO IN CORSO</h1>
+        <button onClick={() => setStatus("INITIAL")}>ANNULLA</button>
+      </div>
+    );
+  }
+
+  if (status === "DATA_SENDED") {
+    return (
+      <div className={styles.response}>
+        {data?.success === true && <h1>DATI INVIATI VALIDI</h1>}
+        {data?.success === false && <h1>DATI INVIATI NON VALIDI</h1>}
+        <button onClick={() => setStatus("INITIAL")}>
+          INVIA UN ALTRO VALORE
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.main}>

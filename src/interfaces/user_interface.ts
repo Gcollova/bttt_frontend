@@ -2,5 +2,6 @@ export interface User{
     name:           string,
     age:            number,
     isMarried:      boolean,
-    dateOfBirth:    string
+    dateOfBirth:    string,
+    userID?:        string,
 }

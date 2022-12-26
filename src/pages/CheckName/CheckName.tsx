@@ -30,7 +30,7 @@ export function CheckName() {
   useEffect(() => {
     if (status === "SEND_DATA") {
       setStatus("SENDING_DATA");
-      fetch("http://localhost:3001/info/validate", {
+      fetch(`${window.location.origin.replace("3000", "3001")}/info/validate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function CheckName() {
 
   if (status === "ERROR_SENDING_DATA") {
     return (
-      <div>
+      <div className={styles.badResponse}>
         <h1>ERRORE INVIO DATI</h1>
         <button onClick={() => setStatus("INITIAL")}>RIPROVA</button>
       </div>
@@ -67,7 +67,7 @@ export function CheckName() {
 
   if (status === "SEND_DATA" || status === "SENDING_DATA") {
     return (
-      <div>
+      <div className={styles.response}>
         <h1>INVIO IN CORSO</h1>
         <button onClick={() => setStatus("INITIAL")}>ANNULLA</button>
       </div>
@@ -76,7 +76,7 @@ export function CheckName() {
 
   if (status === "DATA_SENDED") {
     return (
-      <div>
+      <div className={styles.response}>
         {data?.success === true && <h1>DATI INVIATI VALIDI</h1>}
         {data?.success === false && <h1>DATI INVIATI NON VALIDI</h1>}
         <button onClick={() => setStatus("INITIAL")}>

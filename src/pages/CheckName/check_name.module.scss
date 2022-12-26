@@ -12,3 +12,10 @@
     }
     
 }
+
+.response{
+    @include const.error-handler($isError:false)
+}
+.badResponse{
+    @include const.error-handler($isError:true)
+}
