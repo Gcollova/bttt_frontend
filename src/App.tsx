@@ -3,6 +3,7 @@ import { CheckName } from './pages/CheckName/CheckName';
 import { Home } from './pages/Home/Home';
 import styles from './app.module.scss';
 import { useState } from "react";
+import CollectName from "./pages/CollectName/CollectName";
 
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="check-name" element={<CheckName />} />
+          <Route path="collect-name" element={<CollectName />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>

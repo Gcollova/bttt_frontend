@@ -23,6 +23,16 @@ $mainText: rgb(27, 27, 33);
                 border: 1px solid black;
                 border-radius: 3px;
             }
+            .radioWrapper{
+                display: flex;
+                justify-content: space-between;
+                max-width: 50px;
+                align-items: center;
+                
+                input{
+                    min-width: 0;
+                }
+            }
         }
 
         button{
