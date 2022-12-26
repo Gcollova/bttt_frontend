@@ -16,7 +16,7 @@ export function CheckName() {
 
   function handleSubmission(e:React.FormEvent<HTMLFormElement>){
     e.preventDefault();
-    console.log(value.trim().match(/^[a-z ,.'-]+$/i))
+    
     if(value.trim() !== "" && nameCheck(value.trim())){
 
       setStatus("SEND_DATA");
