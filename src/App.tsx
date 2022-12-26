@@ -1,5 +1,5 @@
-import { Routes, Route, Outlet, Link } from "react-router-dom";
-import { CheckName } from './pages/CheckName';
+import { Routes, Route, Outlet, Link, useParams, useLocation } from "react-router-dom";
+import { CheckName } from './pages/CheckName/CheckName';
 import { Home } from './pages/Home/Home';
 import styles from './app.module.scss';
 import { useState } from "react";
@@ -19,7 +19,8 @@ export default function App() {
 const links =  [{path:'/',name:'Home'},{path:'/check-name',name:'Check Name'},{path:'/collect-name',name:'Collect Name'}];
 
 function Layout() {
-  const [selected,setSelected] = useState<string>('/');
+  const location = useLocation();
+  const [selected,setSelected] = useState<string>(location.pathname);
   return (
     <div className={styles.main}>
       <nav className={styles._nav}>
